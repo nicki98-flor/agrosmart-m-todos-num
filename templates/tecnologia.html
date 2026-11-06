@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+
+{% block title %}Tecnología | AgroSmart{% endblock %}
+
+{% block content %}
+
+<section class="seccion">
+    <div class="contenedor">
+
+        <p class="subtitulo">AgroSmart</p>
+
+        <h1 class="titulo-seccion">
+            Tecnología e innovación para la agricultura
+        </h1>
+
+        <p class="descripcion">
+            AgroSmart estudia la adopción de sistemas de riego inteligente
+            mediante un modelo matemático de crecimiento logístico.
+            Su objetivo es analizar escenarios de incorporación tecnológica
+            y comparar métodos numéricos para resolver una ecuación diferencial.
+        </p>
+
+        <div class="bloque-info">
+            <div>
+                <h2>El problema</h2>
+                <p class="descripcion">
+                    El uso eficiente del agua es uno de los desafíos
+                    de la agricultura. Los sistemas de riego inteligente
+                    permiten incorporar sensores y herramientas digitales
+                    para apoyar la gestión del agua.
+                </p>
+            </div>
+
+            <img src="{{ url_for('static', filename='img/Riego 6.jpg') }}"
+                 alt="Sistema de riego inteligente">
+        </div>
+
+        <div class="modelo">
+            <h3>Modelo diferencial logístico</h3>
+
+            <div class="ecuacion">
+                dU/dt = rU(1 - U/K)
+            </div>
+
+            <p>
+                Este modelo representa el crecimiento de la adopción
+                tecnológica hasta aproximarse a un nivel de saturación.
+            </p>
+        </div>
+
+    </div>
+</section>
+
+{% endblock %}

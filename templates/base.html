@@ -1,0 +1,67 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>{% block title %}AgroSmart{% endblock %}</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/estilos.css') }}">
+
+    {% block head %}{% endblock %}
+</head>
+
+<body>
+
+    <nav class="navbar">
+
+        <a href="{{ url_for('inicio') }}" class="logo">
+            🌱 Agro<span>Smart</span>
+        </a>
+
+        <ul class="nav-links">
+            <li><a href="{{ url_for('inicio') }}">Inicio</a></li>
+            <li><a href="{{ url_for('tecnologia') }}">Tecnología</a></li>
+            <li><a href="{{ url_for('simulador') }}">Simulador</a></li>
+            <li><a href="{{ url_for('historial') }}">Historial</a></li>
+        </ul>
+
+        <a href="{{ url_for('simulador') }}" class="btn">
+            Simular ahora
+        </a>
+
+    </nav>
+
+    <main>
+
+        {% with mensajes = get_flashed_messages(with_categories=true) %}
+            {% if mensajes %}
+                <div class="contenedor">
+                    {% for categoria, mensaje in mensajes %}
+                        <div class="alert {{ categoria }}">
+                            {{ mensaje }}
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
+
+        {% block content %}{% endblock %}
+
+    </main>
+
+    <footer class="footer">
+        <h3>🌱 AgroSmart</h3>
+        <p>
+            Simulación matemática para el estudio de la adopción
+            de sistemas de riego inteligente.
+        </p>
+        <p>Proyecto académico de Métodos Numéricos | 2026</p>
+    </footer>
+
+    {% block scripts %}{% endblock %}
+
+</body>
+</html>

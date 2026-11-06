@@ -1,0 +1,146 @@
+{% extends "base.html" %}
+
+{% block title %}Historial | AgroSmart{% endblock %}
+
+{% block content %}
+
+<section class="ag-page-header">
+    <div class="ag-container">
+        <span class="ag-eyebrow">REGISTRO DE EXPERIMENTOS</span>
+        <h1>Historial de simulaciones</h1>
+        <p>
+            Consulta los experimentos realizados, revisa sus parámetros
+            y accede a los resultados numéricos almacenados en AgroSmart.
+        </p>
+        <div class="ag-header-note">
+            <span>📊</span>
+            <span>Cada registro conserva la configuración de una simulación realizada.</span>
+        </div>
+    </div>
+</section>
+
+<section class="ag-container ag-history">
+
+    {% if simulaciones %}
+
+    <div class="ag-history-summary">
+        <div class="ag-stat-card">
+            <span class="ag-stat-icon">📁</span>
+            <div>
+                <strong>{{ simulaciones|length }}</strong>
+                <span>Simulaciones registradas</span>
+            </div>
+        </div>
+
+        <div class="ag-stat-card">
+            <span class="ag-stat-icon">🧮</span>
+            <div>
+                <strong>03</strong>
+                <span>Enfoques de resolución</span>
+            </div>
+        </div>
+
+        <div class="ag-stat-card">
+            <span class="ag-stat-icon">🌱</span>
+            <div>
+                <strong>AgroSmart</strong>
+                <span>Modelo de adopción logística</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="ag-table-card">
+
+        <div class="ag-history-heading">
+            <div>
+                <span class="ag-eyebrow">BASE DE DATOS</span>
+                <h2>Experimentos almacenados</h2>
+                <p>
+                    Selecciona un registro para consultar sus resultados
+                    y comparar las aproximaciones numéricas.
+                </p>
+            </div>
+
+            <a href="{{ url_for('simulador') }}" class="btn-primary">
+                + Nueva simulación
+            </a>
+        </div>
+
+        <div class="ag-table-scroll">
+            <table class="ag-table">
+                <thead>
+                    <tr>
+                        <th>Registro</th>
+                        <th>Fecha</th>
+                        <th>Adopción inicial (U₀)</th>
+                        <th>Tasa (r)</th>
+                        <th>Límite (K)</th>
+                        <th>Periodo</th>
+                        <th>Consulta</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    {% for item in simulaciones %}
+                    <tr>
+                        <td>
+                            <span class="ag-record-id">#{{ item.id }}</span>
+                        </td>
+                        <td>{{ item.fecha }}</td>
+                        <td>{{ item.productores_iniciales }}</td>
+                        <td>{{ item.tasa_adopcion }}</td>
+                        <td>{{ item.limite_productores }}</td>
+                        <td>{{ item.tiempo_final }} meses</td>
+                        <td>
+                            <a class="ag-view-link"
+                               href="{{ url_for('resultados', simulacion_id=item.id) }}">
+                                Ver resultados <span>→</span>
+                            </a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <div class="ag-table-footer">
+            <span>Los registros se recuperan desde la base de datos de AgroSmart.</span>
+            <span>{{ simulaciones|length }} registro(s)</span>
+        </div>
+
+    </div>
+
+    <div class="ag-history-explanation">
+        <div>
+            <h3>¿Qué información contiene cada registro?</h3>
+            <p>
+                Cada experimento conserva sus condiciones iniciales:
+                cantidad de adoptantes, tasa de crecimiento, límite estimado
+                y periodo de estudio. Al seleccionar "Ver resultados",
+                podrás consultar los cálculos asociados a esa ejecución.
+            </p>
+        </div>
+        <div class="ag-history-tip">💡</div>
+    </div>
+
+    {% else %}
+
+    <div class="ag-empty-state">
+        <div class="ag-empty-icon">📊</div>
+        <span class="ag-eyebrow">SIN REGISTROS DISPONIBLES</span>
+        <h2>Aún no hay simulaciones guardadas</h2>
+        <p>
+            Cuando ejecutes tu primer experimento, sus parámetros y resultados
+            aparecerán en esta sección. Podrás consultarlos posteriormente
+            para estudiar y comparar los escenarios.
+        </p>
+        <a href="{{ url_for('simulador') }}" class="btn-primary">
+            Realizar primera simulación →
+        </a>
+    </div>
+
+    {% endif %}
+
+</section>
+
+{% endblock %}

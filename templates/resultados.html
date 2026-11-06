@@ -1,0 +1,344 @@
+
+{% extends "base.html" %}
+
+{% block title %}Resultados | AgroSmart{% endblock %}
+
+{% block head %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+{% endblock %}
+
+{% block content %}
+
+{% set sim = datos.simulacion %}
+
+<!-- CABECERA DE RESULTADOS -->
+<section class="res-hero">
+    <div class="res-hero-content">
+        <span class="res-eyebrow">AGROSMART · ANÁLISIS MATEMÁTICO</span>
+        <h1>Resultados de la simulación</h1>
+        <p>
+            Evaluación de la adopción de sistemas de riego inteligente
+            mediante el modelo logístico y métodos numéricos.
+        </p>
+
+        <div class="res-hero-tags">
+            <span>Modelo logístico</span>
+            <span>Método de Heun</span>
+            <span>Runge-Kutta RK4</span>
+        </div>
+    </div>
+
+    <div class="res-hero-image">
+        <img
+            src="{{ url_for('static', filename='img/Riego 5.jpg') }}"
+            alt="Sistema de riego inteligente en un cultivo"
+        >
+        <div class="res-image-caption">
+            <span>🌱</span>
+            <div>
+                <strong>Innovación agrícola</strong>
+                <small>Uso eficiente de la tecnología</small>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- RESUMEN DE PARÁMETROS -->
+<section class="res-container res-summary-section">
+
+    <div class="res-section-heading">
+        <div>
+            <span class="res-eyebrow">CONFIGURACIÓN UTILIZADA</span>
+            <h2>Parámetros de simulación</h2>
+            <p>Valores empleados para resolver el modelo matemático.</p>
+        </div>
+        <span class="res-status">✓ Simulación ejecutada</span>
+    </div>
+
+    <div class="res-summary-grid">
+
+        <article class="res-summary-card">
+            <div class="res-card-icon">👨‍🌾</div>
+            <span>Productores iniciales</span>
+            <strong>{{ sim.productores_iniciales|round(2) }}</strong>
+            <small>Condición inicial U₀</small>
+        </article>
+
+        <article class="res-summary-card">
+            <div class="res-card-icon">📈</div>
+            <span>Tasa de adopción</span>
+            <strong>{{ sim.tasa_adopcion }}</strong>
+            <small>Por mes</small>
+        </article>
+
+        <article class="res-summary-card">
+            <div class="res-card-icon">🌾</div>
+            <span>Límite estimado</span>
+            <strong>{{ sim.limite_productores|round(2) }}</strong>
+            <small>Capacidad máxima K</small>
+        </article>
+
+        <article class="res-summary-card">
+            <div class="res-card-icon">🗓️</div>
+            <span>Tiempo simulado</span>
+            <strong>{{ sim.tiempo_final }}</strong>
+            <small>Meses de evolución</small>
+        </article>
+
+    </div>
+</section>
+
+<!-- EXPLICACIÓN DEL MODELO -->
+<section class="res-container res-model-explanation">
+    <div class="res-model-icon">∫</div>
+    <div>
+        <span class="res-eyebrow">FUNDAMENTO MATEMÁTICO</span>
+        <h2>Modelo de crecimiento logístico</h2>
+        <p>
+            El modelo representa cómo aumenta la cantidad de productores
+            que adoptan sistemas de riego inteligente. El crecimiento
+            depende de la tasa de adopción y de la capacidad máxima
+            estimada del escenario.
+        </p>
+        <div class="res-formula">
+            dU/dt = rU (1 − U/K)
+        </div>
+    </div>
+</section>
+
+<!-- RESULTADOS PARA CADA TAMAÑO DE PASO -->
+{% for ejecucion in datos.ejecuciones %}
+
+<section class="res-container res-execution">
+
+    <div class="res-execution-heading">
+        <div>
+            <span class="res-eyebrow">EJECUCIÓN {{ "%02d"|format(loop.index) }}</span>
+            <h2>Comparación numérica</h2>
+            <p>
+                Tamaño de paso:
+                <strong>h = {{ ejecucion.paso }} meses</strong>
+            </p>
+        </div>
+
+        <span class="res-step-badge">Paso {{ loop.index }}</span>
+    </div>
+
+    <!-- GRÁFICA -->
+    <article class="res-panel">
+        <div class="res-panel-heading">
+            <div>
+                <span class="res-panel-number">01</span>
+                <h3>Evolución de la adopción tecnológica</h3>
+                <p>
+                    Comparación de la solución analítica con los métodos
+                    numéricos de Heun y Runge-Kutta de cuarto orden.
+                </p>
+            </div>
+        </div>
+
+        <div class="res-chart-container">
+            <canvas id="grafica{{ loop.index }}"></canvas>
+        </div>
+
+        <div class="res-chart-note">
+            <span>●</span>
+            <p>
+                El eje horizontal representa el tiempo en meses y el eje
+                vertical representa la cantidad de productores adoptantes.
+            </p>
+        </div>
+    </article>
+
+    <!-- TABLA DE RESULTADOS -->
+    <article class="res-panel">
+        <div class="res-panel-heading">
+            <div>
+                <span class="res-panel-number">02</span>
+                <h3>Tabla de iteraciones</h3>
+                <p>
+                    Valores calculados en cada instante de tiempo y errores
+                    respecto a la solución analítica.
+                </p>
+            </div>
+        </div>
+
+        <div class="res-table-scroll">
+            <table class="res-table">
+                <thead>
+                    <tr>
+                        <th>Tiempo (meses)</th>
+                        <th>Analítica</th>
+                        <th>Heun</th>
+                        <th>RK4</th>
+                        <th>Error Heun</th>
+                        <th>Error RK4</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    {% for fila in ejecucion.resultados %}
+                    <tr>
+                        <td class="res-time">
+                            {{ "%.2f"|format(fila.tiempo) }}
+                        </td>
+                        <td>{{ "%.4f"|format(fila.analitica) }}</td>
+                        <td>{{ "%.4f"|format(fila.heun) }}</td>
+                        <td>{{ "%.4f"|format(fila.rk4) }}</td>
+                        <td>{{ "%.6f"|format(fila.error_heun_absoluto) }}</td>
+                        <td>{{ "%.6f"|format(fila.error_rk4_absoluto) }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <div class="res-table-footer">
+            <span>Resultados correspondientes a h = {{ ejecucion.paso }}</span>
+            <span>{{ ejecucion.resultados|length }} registros calculados</span>
+        </div>
+    </article>
+
+    <!-- ANÁLISIS DE ERRORES -->
+    <div class="res-error-heading">
+        <span class="res-eyebrow">03 · PRECISIÓN NUMÉRICA</span>
+        <h3>Análisis de errores</h3>
+        <p>
+            Se presentan los mayores errores registrados durante esta ejecución.
+            Un valor menor indica una aproximación más cercana a la solución analítica.
+        </p>
+    </div>
+
+    <div class="res-error-grid">
+
+        <article class="res-error-card">
+            <span class="res-error-method">HEUN</span>
+            <small>Error absoluto máximo</small>
+            <strong>
+                {{ "%.8f"|format(ejecucion.resultados|map(attribute='error_heun_absoluto')|max) }}
+            </strong>
+            <span class="res-error-unit">Productores</span>
+        </article>
+
+        <article class="res-error-card res-error-highlight">
+            <span class="res-error-method">RK4</span>
+            <small>Error absoluto máximo</small>
+            <strong>
+                {{ "%.8f"|format(ejecucion.resultados|map(attribute='error_rk4_absoluto')|max) }}
+            </strong>
+            <span class="res-error-unit">Productores</span>
+        </article>
+
+        <article class="res-error-card">
+            <span class="res-error-method">HEUN</span>
+            <small>Error relativo máximo</small>
+            <strong>
+                {{ "%.6f"|format(ejecucion.resultados|map(attribute='error_heun_relativo')|max) }}%
+            </strong>
+            <span class="res-error-unit">Porcentaje</span>
+        </article>
+
+        <article class="res-error-card res-error-highlight">
+            <span class="res-error-method">RK4</span>
+            <small>Error relativo máximo</small>
+            <strong>
+                {{ "%.6f"|format(ejecucion.resultados|map(attribute='error_rk4_relativo')|max) }}%
+            </strong>
+            <span class="res-error-unit">Porcentaje</span>
+        </article>
+
+    </div>
+
+</section>
+
+{% endfor %}
+
+<!-- INTERPRETACIÓN -->
+<section class="res-container res-interpretation">
+
+    <div class="res-interpretation-header">
+        <span class="res-eyebrow">04 · ANÁLISIS DE RESULTADOS</span>
+        <h2>Interpretación matemática</h2>
+        <p>
+            ¿Cómo debemos comprender los valores obtenidos en la simulación?
+        </p>
+    </div>
+
+    <div class="res-interpretation-grid">
+
+        <article class="res-interpretation-card">
+            <span class="res-interpretation-icon">📊</span>
+            <h3>Solución analítica</h3>
+            <p>
+                Representa la solución exacta del modelo logístico y sirve
+                como referencia para comparar los resultados numéricos.
+            </p>
+        </article>
+
+        <article class="res-interpretation-card">
+            <span class="res-interpretation-icon">🔢</span>
+            <h3>Método de Heun</h3>
+            <p>
+                Utiliza una predicción y una corrección para aproximar
+                la evolución de los productores adoptantes.
+            </p>
+        </article>
+
+        <article class="res-interpretation-card">
+            <span class="res-interpretation-icon">⚙️</span>
+            <h3>Método RK4</h3>
+            <p>
+                Emplea cuatro evaluaciones de la función por paso para
+                obtener una aproximación numérica de mayor orden.
+            </p>
+        </article>
+
+    </div>
+
+    <div class="res-conclusion">
+        <span class="res-conclusion-icon">💡</span>
+        <div>
+            <h3>Conclusión de la simulación</h3>
+            <p>
+                La comparación de los métodos permite estudiar su precisión
+                frente a la solución analítica. Generalmente, al disminuir
+                el tamaño de paso se espera reducir el error numérico.
+                La precisión real debe verificarse con los valores obtenidos
+                en cada ejecución.
+            </p>
+            <p>
+                AgroSmart representa un escenario matemático hipotético
+                de adopción tecnológica. Los resultados no constituyen
+                una predicción estadística de una comunidad real.
+            </p>
+        </div>
+    </div>
+
+</section>
+
+<!-- ACCIONES -->
+<section class="res-container res-bottom-actions">
+    <div>
+        <h3>¿Deseas realizar otro análisis?</h3>
+        <p>Modifica los parámetros y compara nuevos escenarios.</p>
+    </div>
+
+    <div class="res-action-buttons">
+        <a href="{{ url_for('simulador') }}" class="btn-primary">
+            Nueva simulación →
+        </a>
+
+        <a href="{{ url_for('historial') }}" class="btn btn-secundario">
+            Ver historial
+        </a>
+    </div>
+</section>
+
+<!-- DATOS PARA LAS GRÁFICAS -->
+<script id="datos-ejecuciones" type="application/json">
+    {{ datos.ejecuciones|tojson }}
+</script>
+
+<script src="{{ url_for('static', filename='js/graficas.js') }}"></script>
+
+{% endblock %}

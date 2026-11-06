@@ -1,0 +1,188 @@
+{% extends "base.html" %}
+
+{% block title %}Simulador | AgroSmart{% endblock %}
+
+{% block content %}
+
+<section class="ag-page-header">
+    <div class="ag-container">
+        <span class="ag-eyebrow">LABORATORIO MATEMÁTICO</span>
+        <h1>Simulador de adopción tecnológica</h1>
+        <p>
+            Explora cómo puede evolucionar la incorporación de sistemas
+            de riego inteligente en una comunidad agrícola mediante
+            un modelo diferencial logístico.
+        </p>
+        <div class="ag-header-note">
+            <span>🌱</span>
+            <span>Experimenta con parámetros y compara la precisión de los métodos numéricos.</span>
+        </div>
+    </div>
+</section>
+
+<section class="ag-container ag-simulator">
+
+    <div class="ag-form-card">
+        <div class="ag-card-title">
+            <div>
+                <span class="ag-eyebrow">CONFIGURACIÓN DEL EXPERIMENTO</span>
+                <h2>Parámetros de simulación</h2>
+                <p>Introduce los valores que definirán el escenario de estudio.</p>
+            </div>
+            <div class="ag-icon">⚙️</div>
+        </div>
+
+        <form method="POST" action="{{ url_for('simulador') }}">
+
+            <div class="ag-form-section">
+                <h3><span>01</span> Condiciones iniciales</h3>
+                <p class="ag-section-description">
+                    Definen el estado inicial y el comportamiento esperado
+                    de la adopción tecnológica.
+                </p>
+
+                <div class="form-group">
+                    <label for="U0">Productores adoptantes iniciales (U₀)</label>
+                    <input type="number" id="U0" name="U0"
+                           value="10" min="0.01" step="any" required>
+                    <small>
+                        Cantidad de productores que ya utilizan sistemas
+                        de riego inteligente al inicio del estudio.
+                    </small>
+                </div>
+
+                <div class="form-group">
+                    <label for="r">Tasa de crecimiento (r)</label>
+                    <input type="number" id="r" name="r"
+                           value="0.12" min="0.0001" step="any" required>
+                    <small>
+                        Ritmo de crecimiento mensual de la adopción.
+                        Por ejemplo, 0.12 representa una tasa de 0.12 por mes.
+                    </small>
+                </div>
+
+                <div class="form-group">
+                    <label for="K">Capacidad máxima estimada (K)</label>
+                    <input type="number" id="K" name="K"
+                           value="100" min="1" step="any" required>
+                    <small>
+                        Límite estimado de productores que podrían adoptar
+                        la tecnología en el escenario planteado.
+                    </small>
+                </div>
+
+                <div class="form-group">
+                    <label for="tiempo">Periodo de simulación</label>
+                    <input type="number" id="tiempo" name="tiempo"
+                           value="24" min="0.01" step="any" required>
+                    <small>
+                        Tiempo total que se desea analizar, expresado en meses.
+                    </small>
+                </div>
+            </div>
+
+            <div class="ag-form-section">
+                <h3><span>02</span> Precisión numérica</h3>
+                <p class="ag-section-description">
+                    Los tamaños de paso permiten comparar el comportamiento
+                    de los métodos con diferentes intervalos de cálculo.
+                </p>
+
+                <div class="two-inputs">
+                    <div class="form-group">
+                        <label for="h1">Primer tamaño de paso (h₁)</label>
+                        <input type="number" id="h1" name="h1"
+                               value="1" min="0.0001" step="any" required>
+                        <small>Intervalo de cálculo en meses.</small>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="h2">Segundo tamaño de paso (h₂)</label>
+                        <input type="number" id="h2" name="h2"
+                               value="0.5" min="0.0001" step="any" required>
+                        <small>Intervalo alternativo en meses.</small>
+                    </div>
+                </div>
+            </div>
+
+            <div class="ag-form-actions">
+                <button type="submit" class="btn-primary full-button">
+                    Ejecutar simulación <span>→</span>
+                </button>
+                <p>Verifica los parámetros antes de ejecutar el experimento.</p>
+            </div>
+
+        </form>
+    </div>
+
+    <aside class="ag-side-content">
+
+        <div class="ag-model-card">
+            <span class="ag-eyebrow ag-light">MODELO MATEMÁTICO</span>
+            <h2>Crecimiento logístico</h2>
+
+            <div class="ag-equation">
+                <span>dU</span>
+                <span class="ag-fraction-line">────</span>
+                <span>dt</span>
+                <span>= rU (1 − U/K)</span>
+            </div>
+
+            <p>
+                La ecuación representa un crecimiento que inicialmente
+                puede acelerarse, pero que se desacelera cuando la cantidad
+                de adoptantes se aproxima al límite estimado.
+            </p>
+
+            <div class="ag-variable-list">
+                <div><strong>U(t)</strong><span>Productores adoptantes en el tiempo.</span></div>
+                <div><strong>r</strong><span>Tasa de crecimiento mensual.</span></div>
+                <div><strong>K</strong><span>Capacidad máxima estimada.</span></div>
+                <div><strong>U₀</strong><span>Adopción inicial.</span></div>
+            </div>
+        </div>
+
+        <div class="ag-concept-card">
+            <span class="ag-eyebrow">MÉTODOS DE RESOLUCIÓN</span>
+            <h3>¿Qué métodos se comparan?</h3>
+
+            <div class="ag-method">
+                <span class="ag-method-number">01</span>
+                <div>
+                    <strong>Solución analítica</strong>
+                    <p>Permite obtener el valor de referencia exacto del modelo.</p>
+                </div>
+            </div>
+
+            <div class="ag-method">
+                <span class="ag-method-number">02</span>
+                <div>
+                    <strong>Método de Heun</strong>
+                    <p>Utiliza una predicción y una corrección para aproximar la solución.</p>
+                </div>
+            </div>
+
+            <div class="ag-method">
+                <span class="ag-method-number">03</span>
+                <div>
+                    <strong>Runge-Kutta de cuarto orden (RK4)</strong>
+                    <p>Combina cuatro evaluaciones para obtener una aproximación numérica más precisa.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="ag-academic-note">
+            <strong>Nota académica</strong>
+            <p>
+                Los valores iniciales son parámetros hipotéticos de un
+                escenario de simulación. Los resultados permiten estudiar
+                el comportamiento matemático del modelo y no constituyen
+                predicciones reales sobre productores agrícolas.
+            </p>
+        </div>
+
+    </aside>
+
+</section>
+
+{% endblock %}

@@ -1,0 +1,192 @@
+{% extends "base.html" %}
+
+{% block title %}AgroSmart | Agricultura Inteligente{% endblock %}
+
+{% block content %}
+
+<section class="hero">
+    <div class="hero-contenido">
+        <span class="hero-etiqueta">🌱 Innovación tecnológica para el agro</span>
+
+        <h1>El futuro de la agricultura comienza con el uso inteligente del agua</h1>
+
+        <p>
+            AgroSmart es una plataforma de simulación matemática que estudia
+            la adopción de sistemas de riego inteligente mediante ecuaciones
+            diferenciales y métodos numéricos.
+        </p>
+
+        <a href="{{ url_for('simulador') }}" class="btn">
+            Iniciar simulación →
+        </a>
+
+        <a href="{{ url_for('tecnologia') }}" class="btn btn-secundario">
+            Conocer el proyecto
+        </a>
+    </div>
+</section>
+
+<section class="seccion">
+    <div class="contenedor">
+
+        <p class="subtitulo">Sobre AgroSmart</p>
+
+        <h2 class="titulo-seccion">
+            Tecnología al servicio de la agricultura
+        </h2>
+
+        <p class="descripcion">
+            La agricultura enfrenta el desafío de aprovechar eficientemente
+            los recursos hídricos. El riego inteligente representa una
+            alternativa tecnológica que permite mejorar el control del agua
+            mediante sensores, automatización y herramientas digitales.
+        </p>
+
+        <div class="bloque-info">
+
+            <div>
+                <h2>¿Cuál es el problema que buscamos estudiar?</h2>
+
+                <p class="descripcion">
+                    Muchos sistemas de riego tradicionales dependen de
+                    decisiones manuales y no siempre consideran las
+                    condiciones de humedad del suelo. La incorporación
+                    de tecnologías inteligentes puede contribuir a un
+                    uso más eficiente del agua.
+                </p>
+
+                <ul class="lista-beneficios">
+                    <li>Optimización del uso del agua.</li>
+                    <li>Incorporación de herramientas tecnológicas.</li>
+                    <li>Seguimiento de la adopción de nuevas soluciones.</li>
+                    <li>Apoyo a la toma de decisiones mediante simulaciones.</li>
+                </ul>
+            </div>
+
+            <img src="{{ url_for('static', filename='img/Riego 1.jpg') }}"
+                 alt="Sensor de humedad en agricultura">
+        </div>
+
+    </div>
+</section>
+
+<section class="seccion" style="background: #EDF5ED;">
+    <div class="contenedor">
+
+        <p class="subtitulo">Tecnología aplicada</p>
+
+        <h2 class="titulo-seccion">
+            ¿Cómo funciona el riego inteligente?
+        </h2>
+
+        <p class="descripcion">
+            Los sistemas de riego inteligente utilizan dispositivos y
+            herramientas digitales para controlar las condiciones del
+            cultivo y gestionar el suministro de agua.
+        </p>
+
+        <div class="tarjetas">
+
+            <article class="tarjeta">
+                <img src="{{ url_for('static', filename='img/Riego 2.jpg') }}"
+                     alt="Sensores agrícolas">
+
+                <div class="tarjeta-contenido">
+                    <h3>Sensores de humedad</h3>
+                    <p>
+                        Permiten medir la humedad del suelo y proporcionar
+                        información para decidir cuándo regar.
+                    </p>
+                </div>
+            </article>
+
+            <article class="tarjeta">
+                <img src="{{ url_for('static', filename='img/Riego 3.jpg') }}"
+                     alt="Agricultura digital">
+
+                <div class="tarjeta-contenido">
+                    <h3>Monitoreo digital</h3>
+                    <p>
+                        Facilita la supervisión de los cultivos mediante
+                        herramientas informáticas y plataformas digitales.
+                    </p>
+                </div>
+            </article>
+
+            <article class="tarjeta">
+                <img src="{{ url_for('static', filename='img/Riego 4.jpg') }}"
+                     alt="Sistema de riego eficiente">
+
+                <div class="tarjeta-contenido">
+                    <h3>Uso eficiente del agua</h3>
+                    <p>
+                        Contribuye a gestionar el suministro de agua de
+                        acuerdo con las necesidades del cultivo.
+                    </p>
+                </div>
+            </article>
+
+        </div>
+    </div>
+</section>
+
+<section class="seccion">
+    <div class="contenedor">
+
+        <p class="subtitulo">Métodos numéricos</p>
+
+        <h2 class="titulo-seccion">
+            Matemáticas para comprender la adopción tecnológica
+        </h2>
+
+        <p class="descripcion">
+            AgroSmart utiliza una ecuación diferencial logística para
+            representar cómo puede crecer la cantidad de productores
+            que adoptan sistemas de riego inteligente con el paso del tiempo.
+        </p>
+
+        <div class="modelo">
+            <h3>Modelo de crecimiento logístico</h3>
+
+            <div class="ecuacion">
+                dU/dt = rU(1 - U/K)
+            </div>
+
+            <p>
+                El modelo considera una tasa de crecimiento de adopción
+                y un límite estimado de productores que podrían incorporar
+                esta tecnología.
+            </p>
+
+            <br>
+
+            <a href="{{ url_for('tecnologia') }}" class="btn">
+                Explorar el modelo matemático →
+            </a>
+        </div>
+
+    </div>
+</section>
+
+<section class="seccion" style="background: #EDF5ED;">
+    <div class="contenedor" style="text-align:center;">
+
+        <p class="subtitulo">Experimenta con AgroSmart</p>
+
+        <h2 class="titulo-seccion">
+            Ejecuta tu propia simulación
+        </h2>
+
+        <p class="descripcion" style="margin: 0 auto 25px;">
+            Modifica los parámetros iniciales, compara los métodos
+            numéricos y analiza sus resultados y errores.
+        </p>
+
+        <a href="{{ url_for('simulador') }}" class="btn">
+            Ir al simulador →
+        </a>
+
+    </div>
+</section>
+
+{% endblock %}
